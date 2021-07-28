@@ -1,0 +1,16 @@
+version: '3.7'
+services:
+  mongo-mkt:
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mkt-usuario
+      MONGO_INITDB_ROOT_PASSWORD: mkt-senha
+      MONGO_INITDB_DATABASE: mkt
+  web-mkt:
+    image: node
+    volumes:
+      - ./:/app
+    working_dir: /app
+    command: "npm start"
+    ports:
+      - 3000:3000
