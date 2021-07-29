@@ -2,25 +2,32 @@ import LeadStatus from './lead-status';
 import NonCustomerError from './non-customer-error';
 
 export default class Lead {
-    private status: LeadStatus;
+    public _id: string|undefined = undefined;
 
-    constructor(public readonly fullName: string, public readonly email: string) {
-        this.status = LeadStatus.INTERESTED;
+    constructor(
+        public readonly fullName: string,
+        public readonly email: string,
+        private leadStatus: LeadStatus = LeadStatus.INTERESTED
+    ) {
+    }
+
+    get status(): LeadStatus {
+        return this.leadStatus;
     }
 
     convert(): void {
-        this.status = LeadStatus.CUSTOMER;
+        this.leadStatus = LeadStatus.CUSTOMER;
     }
 
     lose(): void {
-        if (this.status === LeadStatus.CANCELED) {
+        if (this.leadStatus === LeadStatus.CANCELED) {
             return;
         }
 
-        if (this.status !== LeadStatus.CUSTOMER) {
+        if (this.leadStatus !== LeadStatus.CUSTOMER) {
             throw new NonCustomerError();
         }
 
-        this.status = LeadStatus.CANCELED;
+        this.leadStatus = LeadStatus.CANCELED;
     }
 }
